@@ -33,8 +33,11 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
+          name: my-pages-site
           path: '.'
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: my-pages-site
