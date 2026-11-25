@@ -156,3 +156,60 @@ form.addEventListener("submit", (e) => {
 
 // ---------- Footer year ----------
 document.getElementById("year").textContent = new Date().getFullYear();
+
+// Paste into your script.js (or a <script> tag at the end of index.html).
+// To add a document: put the PDF in the docs/ folder and add one line below.
+const DOCS = [
+  { title: "Professional Resume",
+    desc: "ATS-friendly resume with my skills, projects, and education.",
+    file: "docs/Steven_Lean_Laure_Targeted_Resume_A4.pdf" },
+  { title: "Cover Letter",
+    desc: "A cover letter introducing my skills and projects for a game developer or designer role.",
+    file: "docs/Steven_Lean_Laure_-_Cover_Letter.pdf" },
+  { title: "Developer Guide",
+    desc: "A step-by-step guide for setting up, updating, and publishing this portfolio website.",
+    file: "docs/Steven_Lean_Laure_-_Developer_Guide.pdf" }
+];
+
+(function () {
+  const grid = document.getElementById("docsGrid");
+  const modal = document.getElementById("docsModal");
+  const frame = document.getElementById("docsModalFrame");
+  const modalTitle = document.getElementById("docsModalTitle");
+  if (!grid) return;
+
+  function openDoc(doc) {
+    frame.src = doc.file + "#view=FitH";
+    modalTitle.textContent = doc.title;
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+  function closeDoc() {
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+    frame.src = "about:blank";
+    document.body.style.overflow = "";
+  }
+
+  DOCS.forEach(function (doc) {
+    const card = document.createElement("article");
+    card.className = "doc-card";
+    card.innerHTML =
+      "<h3>" + doc.title + "</h3>" +
+      "<p>" + doc.desc + "</p>" +
+      '<div class="doc-preview"><iframe src="' + doc.file + '#toolbar=0&navpanes=0&view=FitH" title="' + doc.title + ' preview" loading="lazy"></iframe></div>' +
+      '<p class="doc-note">Preview not showing? Tap View Document.</p>' +
+      '<div class="doc-actions">' +
+        '<button type="button" class="doc-btn primary">View Document</button>' +
+        '<a class="doc-btn ghost" href="' + doc.file + '" download>Download PDF</a>' +
+      "</div>";
+    card.querySelector(".doc-btn.primary").addEventListener("click", function () { openDoc(doc); });
+    card.querySelector(".doc-preview").addEventListener("click", function () { openDoc(doc); });
+    grid.appendChild(card);
+  });
+
+  document.getElementById("docsModalClose").addEventListener("click", closeDoc);
+  modal.addEventListener("click", function (e) { if (e.target === modal) closeDoc(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeDoc(); });
+})();
